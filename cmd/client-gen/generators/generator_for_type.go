@@ -310,10 +310,10 @@ func generateInterface(tags util.Tags) string {
 }
 
 var subresourceDefaultVerbTemplates = map[string]string{
-	"create": `Create(ctx context.Context, $.type|private$Name string, $.inputType|private$ *$.inputType|raw$, opts $.CreateOptions|raw$) (*$.resultType|raw$, error)`,
-	"list":   `List(ctx context.Context, $.type|private$Name string, opts $.ListOptions|raw$) (*$.resultType|raw$List, error)`,
-	"update": `Update(ctx context.Context, $.type|private$Name string, $.inputType|private$ *$.inputType|raw$, opts $.UpdateOptions|raw$) (*$.resultType|raw$, error)`,
-	"get":    `Get(ctx context.Context, $.type|private$Name string, options $.GetOptions|raw$) (*$.resultType|raw$, error)`,
+	"create": `Create(_$.type|private$Name string, _$.inputType|private$ *$.inputType|raw$) (*$.resultType|raw$, error)`,
+	"list":   `List(_$.type|private$Name string, opts $.ListOptions|raw$) (*$.resultType|raw$List, error)`,
+	"update": `Update(_$.type|private$Name string, _$.inputType|private$ *$.inputType|raw$) (*$.resultType|raw$, error)`,
+	"get":    `Get(_$.type|private$Name string, options $.GetOptions|raw$) (*$.resultType|raw$, error)`,
 }
 
 var defaultVerbTemplates = map[string]string{
@@ -411,7 +411,11 @@ func (c *$.type|privatePlural$) List(ctx context.Context, opts $.ListOptions|raw
 
 var listSubresourceTemplate = `
 // List takes $.type|raw$ name, label and field selectors, and returns the list of $.resultType|publicPlural$ that match those selectors.
+<<<<<<< HEAD
 func (c *$.type|privatePlural$) List(ctx context.Context, $.type|private$Name string, opts $.ListOptions|raw$) (result *$.resultType|raw$List, err error) {
+=======
+func (c *$.type|privatePlural$) List(_$.type|private$Name string, opts $.ListOptions|raw$) (result *$.resultType|raw$List, err error) {
+>>>>>>> d9a14a5... Add prefix to avoid argument name conflict with go reserved words "package"
 	var timeout time.Duration
 	if opts.TimeoutSeconds != nil{
 		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
@@ -420,7 +424,7 @@ func (c *$.type|privatePlural$) List(ctx context.Context, $.type|private$Name st
 	err = c.client.Get().
 		$if .namespaced$Namespace(c.ns).$end$
 		Resource("$.type|resource$").
-		Name($.type|private$Name).
+		Name(_$.type|private$Name).
 		SubResource("$.subresourcePath$").
 		VersionedParams(&opts, $.schemeParameterCodec|raw$).
 		Timeout(timeout).
@@ -431,8 +435,13 @@ func (c *$.type|privatePlural$) List(ctx context.Context, $.type|private$Name st
 `
 
 var getTemplate = `
+<<<<<<< HEAD
 // Get takes name of the $.type|private$, and returns the corresponding $.resultType|private$ object, and an error if there is any.
 func (c *$.type|privatePlural$) Get(ctx context.Context, name string, options $.GetOptions|raw$) (result *$.resultType|raw$, err error) {
+=======
+// Get takes name of the _$.type|private$, and returns the corresponding $.resultType|private$ object, and an error if there is any.
+func (c *$.type|privatePlural$) Get(name string, options $.GetOptions|raw$) (result *$.resultType|raw$, err error) {
+>>>>>>> d9a14a5... Add prefix to avoid argument name conflict with go reserved words "package"
 	result = &$.resultType|raw${}
 	err = c.client.Get().
 		$if .namespaced$Namespace(c.ns).$end$
@@ -446,13 +455,18 @@ func (c *$.type|privatePlural$) Get(ctx context.Context, name string, options $.
 `
 
 var getSubresourceTemplate = `
+<<<<<<< HEAD
 // Get takes name of the $.type|private$, and returns the corresponding $.resultType|raw$ object, and an error if there is any.
 func (c *$.type|privatePlural$) Get(ctx context.Context, $.type|private$Name string, options $.GetOptions|raw$) (result *$.resultType|raw$, err error) {
+=======
+// Get takes name of the _$.type|private$, and returns the corresponding $.resultType|raw$ object, and an error if there is any.
+func (c *$.type|privatePlural$) Get(_$.type|private$Name string, options $.GetOptions|raw$) (result *$.resultType|raw$, err error) {
+>>>>>>> d9a14a5... Add prefix to avoid argument name conflict with go reserved words "package"
 	result = &$.resultType|raw${}
 	err = c.client.Get().
 		$if .namespaced$Namespace(c.ns).$end$
 		Resource("$.type|resource$").
-		Name($.type|private$Name).
+		Name(_$.type|private$Name).
 		SubResource("$.subresourcePath$").
 		VersionedParams(&options, $.schemeParameterCodec|raw$).
 		Do(ctx).
@@ -462,8 +476,13 @@ func (c *$.type|privatePlural$) Get(ctx context.Context, $.type|private$Name str
 `
 
 var deleteTemplate = `
+<<<<<<< HEAD
 // Delete takes name of the $.type|private$ and deletes it. Returns an error if one occurs.
 func (c *$.type|privatePlural$) Delete(ctx context.Context, name string, opts $.DeleteOptions|raw$) error {
+=======
+// Delete takes name of the _$.type|private$ and deletes it. Returns an error if one occurs.
+func (c *$.type|privatePlural$) Delete(name string, options *$.DeleteOptions|raw$) error {
+>>>>>>> d9a14a5... Add prefix to avoid argument name conflict with go reserved words "package"
 	return c.client.Delete().
 		$if .namespaced$Namespace(c.ns).$end$
 		Resource("$.type|resource$").
@@ -493,65 +512,106 @@ func (c *$.type|privatePlural$) DeleteCollection(ctx context.Context, opts $.Del
 `
 
 var createSubresourceTemplate = `
+<<<<<<< HEAD
 // Create takes the representation of a $.inputType|private$ and creates it.  Returns the server's representation of the $.resultType|private$, and an error, if there is any.
 func (c *$.type|privatePlural$) Create(ctx context.Context, $.type|private$Name string, $.inputType|private$ *$.inputType|raw$, opts $.CreateOptions|raw$) (result *$.resultType|raw$, err error) {
+=======
+// Create takes the representation of a _$.inputType|private$ and creates it.  Returns the server's representation of the $.resultType|private$, and an error, if there is any.
+func (c *$.type|privatePlural$) Create(_$.type|private$Name string, _$.inputType|private$ *$.inputType|raw$) (result *$.resultType|raw$, err error) {
+>>>>>>> d9a14a5... Add prefix to avoid argument name conflict with go reserved words "package"
 	result = &$.resultType|raw${}
 	err = c.client.Post().
 		$if .namespaced$Namespace(c.ns).$end$
 		Resource("$.type|resource$").
-		Name($.type|private$Name).
+		Name(_$.type|private$Name).
 		SubResource("$.subresourcePath$").
+<<<<<<< HEAD
 		VersionedParams(&opts, $.schemeParameterCodec|raw$).
 		Body($.inputType|private$).
 		Do(ctx).
+=======
+		Body(_$.inputType|private$).
+		Do().
+>>>>>>> d9a14a5... Add prefix to avoid argument name conflict with go reserved words "package"
 		Into(result)
 	return
 }
 `
 
 var createTemplate = `
+<<<<<<< HEAD
 // Create takes the representation of a $.inputType|private$ and creates it.  Returns the server's representation of the $.resultType|private$, and an error, if there is any.
 func (c *$.type|privatePlural$) Create(ctx context.Context, $.inputType|private$ *$.inputType|raw$, opts $.CreateOptions|raw$) (result *$.resultType|raw$, err error) {
+=======
+// Create takes the representation of a _$.inputType|private$ and creates it.  Returns the server's representation of the $.resultType|private$, and an error, if there is any.
+func (c *$.type|privatePlural$) Create(_$.inputType|private$ *$.inputType|raw$) (result *$.resultType|raw$, err error) {
+>>>>>>> d9a14a5... Add prefix to avoid argument name conflict with go reserved words "package"
 	result = &$.resultType|raw${}
 	err = c.client.Post().
 		$if .namespaced$Namespace(c.ns).$end$
 		Resource("$.type|resource$").
+<<<<<<< HEAD
 		VersionedParams(&opts, $.schemeParameterCodec|raw$).
 		Body($.inputType|private$).
 		Do(ctx).
+=======
+		Body(_$.inputType|private$).
+		Do().
+>>>>>>> d9a14a5... Add prefix to avoid argument name conflict with go reserved words "package"
 		Into(result)
 	return
 }
 `
 
 var updateSubresourceTemplate = `
+<<<<<<< HEAD
 // Update takes the top resource name and the representation of a $.inputType|private$ and updates it. Returns the server's representation of the $.resultType|private$, and an error, if there is any.
 func (c *$.type|privatePlural$) Update(ctx context.Context, $.type|private$Name string, $.inputType|private$ *$.inputType|raw$, opts $.UpdateOptions|raw$) (result *$.resultType|raw$, err error) {
+=======
+// Update takes the top resource name and the representation of a _$.inputType|private$ and updates it. Returns the server's representation of the $.resultType|private$, and an error, if there is any.
+func (c *$.type|privatePlural$) Update(_$.type|private$Name string, _$.inputType|private$ *$.inputType|raw$) (result *$.resultType|raw$, err error) {
+>>>>>>> d9a14a5... Add prefix to avoid argument name conflict with go reserved words "package"
 	result = &$.resultType|raw${}
 	err = c.client.Put().
 		$if .namespaced$Namespace(c.ns).$end$
 		Resource("$.type|resource$").
-		Name($.type|private$Name).
+		Name(_$.type|private$Name).
 		SubResource("$.subresourcePath$").
+<<<<<<< HEAD
 		VersionedParams(&opts, $.schemeParameterCodec|raw$).
 		Body($.inputType|private$).
 		Do(ctx).
+=======
+		Body(_$.inputType|private$).
+		Do().
+>>>>>>> d9a14a5... Add prefix to avoid argument name conflict with go reserved words "package"
 		Into(result)
 	return
 }
 `
 
 var updateTemplate = `
+<<<<<<< HEAD
 // Update takes the representation of a $.inputType|private$ and updates it. Returns the server's representation of the $.resultType|private$, and an error, if there is any.
 func (c *$.type|privatePlural$) Update(ctx context.Context, $.inputType|private$ *$.inputType|raw$, opts $.UpdateOptions|raw$) (result *$.resultType|raw$, err error) {
+=======
+// Update takes the representation of a _$.inputType|private$ and updates it. Returns the server's representation of the $.resultType|private$, and an error, if there is any.
+func (c *$.type|privatePlural$) Update(_$.inputType|private$ *$.inputType|raw$) (result *$.resultType|raw$, err error) {
+>>>>>>> d9a14a5... Add prefix to avoid argument name conflict with go reserved words "package"
 	result = &$.resultType|raw${}
 	err = c.client.Put().
 		$if .namespaced$Namespace(c.ns).$end$
 		Resource("$.type|resource$").
+<<<<<<< HEAD
 		Name($.inputType|private$.Name).
 		VersionedParams(&opts, $.schemeParameterCodec|raw$).
 		Body($.inputType|private$).
 		Do(ctx).
+=======
+		Name(_$.inputType|private$.Name).
+		Body(_$.inputType|private$).
+		Do().
+>>>>>>> d9a14a5... Add prefix to avoid argument name conflict with go reserved words "package"
 		Into(result)
 	return
 }
@@ -560,16 +620,26 @@ func (c *$.type|privatePlural$) Update(ctx context.Context, $.inputType|private$
 var updateStatusTemplate = `
 // UpdateStatus was generated because the type contains a Status member.
 // Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
+<<<<<<< HEAD
 func (c *$.type|privatePlural$) UpdateStatus(ctx context.Context, $.type|private$ *$.type|raw$, opts $.UpdateOptions|raw$) (result *$.type|raw$, err error) {
+=======
+
+func (c *$.type|privatePlural$) UpdateStatus(_$.type|private$ *$.type|raw$) (result *$.type|raw$, err error) {
+>>>>>>> d9a14a5... Add prefix to avoid argument name conflict with go reserved words "package"
 	result = &$.type|raw${}
 	err = c.client.Put().
 		$if .namespaced$Namespace(c.ns).$end$
 		Resource("$.type|resource$").
-		Name($.type|private$.Name).
+		Name(_$.type|private$.Name).
 		SubResource("status").
+<<<<<<< HEAD
 		VersionedParams(&opts, $.schemeParameterCodec|raw$).
 		Body($.type|private$).
 		Do(ctx).
+=======
+		Body(_$.type|private$).
+		Do().
+>>>>>>> d9a14a5... Add prefix to avoid argument name conflict with go reserved words "package"
 		Into(result)
 	return
 }
