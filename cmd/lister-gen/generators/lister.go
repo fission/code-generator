@@ -284,8 +284,8 @@ type $.type|public$Lister interface {
 `
 
 var typeListerStruct = `
-// $.type|private$Lister implements the $.type|public$Lister interface.
-type $.type|private$Lister struct {
+// _$.type|private$Lister implements the $.type|public$Lister interface.
+type _$.type|private$Lister struct {
 	indexer cache.Indexer
 }
 `
@@ -293,13 +293,13 @@ type $.type|private$Lister struct {
 var typeListerConstructor = `
 // New$.type|public$Lister returns a new $.type|public$Lister.
 func New$.type|public$Lister(indexer cache.Indexer) $.type|public$Lister {
-	return &$.type|private$Lister{indexer: indexer}
+	return &_$.type|private$Lister{indexer: indexer}
 }
 `
 
 var typeLister_List = `
 // List lists all $.type|publicPlural$ in the indexer.
-func (s *$.type|private$Lister) List(selector labels.Selector) (ret []*$.type|raw$, err error) {
+func (s *_$.type|private$Lister) List(selector labels.Selector) (ret []*$.type|raw$, err error) {
 	err = cache.ListAll(s.indexer, selector, func(m interface{}) {
 		ret = append(ret, m.(*$.type|raw$))
 	})
@@ -309,14 +309,14 @@ func (s *$.type|private$Lister) List(selector labels.Selector) (ret []*$.type|ra
 
 var typeLister_NamespaceLister = `
 // $.type|publicPlural$ returns an object that can list and get $.type|publicPlural$.
-func (s *$.type|private$Lister) $.type|publicPlural$(namespace string) $.type|public$NamespaceLister {
-	return $.type|private$NamespaceLister{indexer: s.indexer, namespace: namespace}
+func (s *_$.type|private$Lister) $.type|publicPlural$(namespace string) $.type|public$NamespaceLister {
+	return _$.type|private$NamespaceLister{indexer: s.indexer, namespace: namespace}
 }
 `
 
 var typeLister_NonNamespacedGet = `
 // Get retrieves the $.type|public$ from the index for a given name.
-func (s *$.type|private$Lister) Get(name string) (*$.type|raw$, error) {
+func (s *_$.type|private$Lister) Get(name string) (*$.type|raw$, error) {
   obj, exists, err := s.indexer.GetByKey(name)
   if err != nil {
     return nil, err
@@ -343,9 +343,9 @@ type $.type|public$NamespaceLister interface {
 `
 
 var namespaceListerStruct = `
-// $.type|private$NamespaceLister implements the $.type|public$NamespaceLister
+// _$.type|private$NamespaceLister implements the $.type|public$NamespaceLister
 // interface.
-type $.type|private$NamespaceLister struct {
+type _$.type|private$NamespaceLister struct {
 	indexer cache.Indexer
 	namespace string
 }
@@ -353,7 +353,7 @@ type $.type|private$NamespaceLister struct {
 
 var namespaceLister_List = `
 // List lists all $.type|publicPlural$ in the indexer for a given namespace.
-func (s $.type|private$NamespaceLister) List(selector labels.Selector) (ret []*$.type|raw$, err error) {
+func (s _$.type|private$NamespaceLister) List(selector labels.Selector) (ret []*$.type|raw$, err error) {
 	err = cache.ListAllByNamespace(s.indexer, s.namespace, selector, func(m interface{}) {
 		ret = append(ret, m.(*$.type|raw$))
 	})
@@ -363,7 +363,7 @@ func (s $.type|private$NamespaceLister) List(selector labels.Selector) (ret []*$
 
 var namespaceLister_Get = `
 // Get retrieves the $.type|public$ from the indexer for a given namespace and name.
-func (s $.type|private$NamespaceLister) Get(name string) (*$.type|raw$, error) {
+func (s _$.type|private$NamespaceLister) Get(name string) (*$.type|raw$, error) {
 	obj, exists, err := s.indexer.GetByKey(s.namespace + "/" + name)
 	if err != nil {
 		return nil, err
