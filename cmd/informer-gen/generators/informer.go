@@ -124,7 +124,7 @@ type $.type|public$Informer interface {
 `
 
 var typeInformerStruct = `
-type $.type|private$Informer struct {
+type _$.type|private$Informer struct {
 	factory $.interfacesSharedInformerFactory|raw$
 	tweakListOptions $.interfacesTweakListOptionsFunc|raw$
 	$if .namespaced$namespace string$end$
@@ -168,19 +168,19 @@ func NewFiltered$.type|public$Informer(client $.clientSetInterface|raw$$if .name
 `
 
 var typeInformerConstructor = `
-func (f *$.type|private$Informer) defaultInformer(client $.clientSetInterface|raw$, resyncPeriod $.timeDuration|raw$) $.cacheSharedIndexInformer|raw$ {
+func (f *_$.type|private$Informer) defaultInformer(client $.clientSetInterface|raw$, resyncPeriod $.timeDuration|raw$) $.cacheSharedIndexInformer|raw$ {
 	return NewFiltered$.type|public$Informer(client$if .namespaced$, f.namespace$end$, resyncPeriod, $.cacheIndexers|raw${$.cacheNamespaceIndex|raw$: $.cacheMetaNamespaceIndexFunc|raw$}, f.tweakListOptions)
 }
 `
 
 var typeInformerInformer = `
-func (f *$.type|private$Informer) Informer() $.cacheSharedIndexInformer|raw$ {
+func (f *_$.type|private$Informer) Informer() $.cacheSharedIndexInformer|raw$ {
 	return f.factory.$.informerFor$(&$.type|raw${}, f.defaultInformer)
 }
 `
 
 var typeInformerLister = `
-func (f *$.type|private$Informer) Lister() $.lister|raw$ {
+func (f *_$.type|private$Informer) Lister() $.lister|raw$ {
 	return $.newLister|raw$(f.Informer().GetIndexer())
 }
 `

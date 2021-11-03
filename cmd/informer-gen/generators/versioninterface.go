@@ -104,6 +104,6 @@ func New(f $.interfacesSharedInformerFactory|raw$, namespace string, tweakListOp
 var versionFuncTemplate = `
 // $.type|publicPlural$ returns a $.type|public$Informer.
 func (v *version) $.type|publicPlural$() $.type|public$Informer {
-	return &$.type|private$Informer{factory: v.factory$if .namespaced$, namespace: v.namespace$end$, tweakListOptions: v.tweakListOptions}
+	return &_$.type|private$Informer{factory: v.factory$if .namespaced$, namespace: v.namespace$end$, tweakListOptions: v.tweakListOptions}
 }
 `
