@@ -358,23 +358,23 @@ func generateInterface(defaultVerbTemplates map[string]string, tags util.Tags) s
 
 func buildSubresourceDefaultVerbTemplates(generateApply bool) map[string]string {
 	m := map[string]string{
-		"create": `Create(ctx $.context|raw$, $.type|private$Name string, $.inputType|private$ *$.inputType|raw$, opts $.CreateOptions|raw$) (*$.resultType|raw$, error)`,
-		"list":   `List(ctx $.context|raw$, $.type|private$Name string, opts $.ListOptions|raw$) (*$.resultType|raw$List, error)`,
-		"update": `Update(ctx $.context|raw$, $.type|private$Name string, $.inputType|private$ *$.inputType|raw$, opts $.UpdateOptions|raw$) (*$.resultType|raw$, error)`,
-		"get":    `Get(ctx $.context|raw$, $.type|private$Name string, options $.GetOptions|raw$) (*$.resultType|raw$, error)`,
+		"create": `Create(ctx $.context|raw$, _$.type|private$Name string, _$.inputType|private$ *$.inputType|raw$, opts $.CreateOptions|raw$) (*$.resultType|raw$, error)`,
+		"list":   `List(ctx $.context|raw$, _$.type|private$Name string, opts $.ListOptions|raw$) (*$.resultType|raw$List, error)`,
+		"update": `Update(ctx $.context|raw$, _$.type|private$Name string, _$.inputType|private$ *$.inputType|raw$, opts $.UpdateOptions|raw$) (*$.resultType|raw$, error)`,
+		"get":    `Get(ctx $.context|raw$, _$.type|private$Name string, options $.GetOptions|raw$) (*$.resultType|raw$, error)`,
 	}
 	if generateApply {
-		m["apply"] = `Apply(ctx $.context|raw$, $.type|private$Name string, $.inputType|private$ *$.inputApplyConfig|raw$, opts $.ApplyOptions|raw$) (*$.resultType|raw$, error)`
+		m["apply"] = `Apply(ctx $.context|raw$, _$.type|private$Name string, _$.inputType|private$ *$.inputApplyConfig|raw$, opts $.ApplyOptions|raw$) (*$.resultType|raw$, error)`
 	}
 	return m
 }
 
 func buildDefaultVerbTemplates(generateApply bool) map[string]string {
 	m := map[string]string{
-		"create": `Create(ctx $.context|raw$, $.inputType|private$ *$.inputType|raw$, opts $.CreateOptions|raw$) (*$.resultType|raw$, error)`,
-		"update": `Update(ctx $.context|raw$, $.inputType|private$ *$.inputType|raw$, opts $.UpdateOptions|raw$) (*$.resultType|raw$, error)`,
+		"create": `Create(ctx $.context|raw$, _$.inputType|private$ *$.inputType|raw$, opts $.CreateOptions|raw$) (*$.resultType|raw$, error)`,
+		"update": `Update(ctx $.context|raw$, _$.inputType|private$ *$.inputType|raw$, opts $.UpdateOptions|raw$) (*$.resultType|raw$, error)`,
 		"updateStatus": `// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
-UpdateStatus(ctx $.context|raw$, $.inputType|private$ *$.type|raw$, opts $.UpdateOptions|raw$) (*$.type|raw$, error)`,
+UpdateStatus(ctx $.context|raw$, _$.inputType|private$ *$.type|raw$, opts $.UpdateOptions|raw$) (*$.type|raw$, error)`,
 		"delete":           `Delete(ctx $.context|raw$, name string, opts $.DeleteOptions|raw$) error`,
 		"deleteCollection": `DeleteCollection(ctx $.context|raw$, opts $.DeleteOptions|raw$, listOpts $.ListOptions|raw$) error`,
 		"get":              `Get(ctx $.context|raw$, name string, opts $.GetOptions|raw$) (*$.resultType|raw$, error)`,
@@ -383,9 +383,9 @@ UpdateStatus(ctx $.context|raw$, $.inputType|private$ *$.type|raw$, opts $.Updat
 		"patch":            `Patch(ctx $.context|raw$, name string, pt $.PatchType|raw$, data []byte, opts $.PatchOptions|raw$, subresources ...string) (result *$.resultType|raw$, err error)`,
 	}
 	if generateApply {
-		m["apply"] = `Apply(ctx $.context|raw$, $.inputType|private$ *$.inputApplyConfig|raw$, opts $.ApplyOptions|raw$) (result *$.resultType|raw$, err error)`
+		m["apply"] = `Apply(ctx $.context|raw$, _$.inputType|private$ *$.inputApplyConfig|raw$, opts $.ApplyOptions|raw$) (result *$.resultType|raw$, err error)`
 		m["applyStatus"] = `// Add a +genclient:noStatus comment above the type to avoid generating ApplyStatus().
-ApplyStatus(ctx $.context|raw$, $.inputType|private$ *$.inputApplyConfig|raw$, opts $.ApplyOptions|raw$) (result *$.resultType|raw$, err error)`
+ApplyStatus(ctx $.context|raw$, _$.inputType|private$ *$.inputApplyConfig|raw$, opts $.ApplyOptions|raw$) (result *$.resultType|raw$, err error)`
 	}
 	return m
 }
@@ -643,7 +643,7 @@ func (c *$.type|privatePlural$) list(ctx $.context|raw$, opts $.ListOptions|raw$
 
 var listSubresourceTemplate = `
 // $.verb$ takes $.type|raw$ name, label and field selectors, and returns the list of $.resultType|publicPlural$ that match those selectors.
-func (c *$.type|privatePlural$) $.verb$(ctx $.context|raw$, $.type|private$Name string, opts $.ListOptions|raw$) (result *$.resultType|raw$List, err error) {
+func (c *$.type|privatePlural$) $.verb$(ctx $.context|raw$, _$.type|private$Name string, opts $.ListOptions|raw$) (result *$.resultType|raw$List, err error) {
 	var timeout $.timeDuration|raw$
 	if opts.TimeoutSeconds != nil{
 		timeout = $.timeDuration|raw$(*opts.TimeoutSeconds) * $.timeSecond|raw$
@@ -653,7 +653,7 @@ func (c *$.type|privatePlural$) $.verb$(ctx $.context|raw$, $.type|private$Name 
 		$if .prefersProtobuf$UseProtobufAsDefault().$end$
 		$if .namespaced$Namespace(c.GetNamespace()).$end$
 		Resource("$.type|resource$").
-		Name($.type|private$Name).
+		Name(_$.type|private$Name).
 		SubResource("$.subresourcePath$").
 		VersionedParams(&opts, $.schemeParameterCodec|raw$).
 		Timeout(timeout).
@@ -664,7 +664,7 @@ func (c *$.type|privatePlural$) $.verb$(ctx $.context|raw$, $.type|private$Name 
 `
 
 var getTemplate = `
-// $.verb$ takes name of the $.type|private$, and returns the corresponding $.resultType|private$ object, and an error if there is any.
+// $.verb$ takes name of the _$.type|private$, and returns the corresponding $.resultType|private$ object, and an error if there is any.
 func (c *$.type|privatePlural$) $.verb$(ctx $.context|raw$, name string, options $.GetOptions|raw$) (result *$.resultType|raw$, err error) {
 	result = &$.resultType|raw${}
 	err = c.GetClient().Get().
@@ -680,14 +680,14 @@ func (c *$.type|privatePlural$) $.verb$(ctx $.context|raw$, name string, options
 `
 
 var getSubresourceTemplate = `
-// $.verb$ takes name of the $.type|private$, and returns the corresponding $.resultType|raw$ object, and an error if there is any.
-func (c *$.type|privatePlural$) $.verb$(ctx $.context|raw$, $.type|private$Name string, options $.GetOptions|raw$) (result *$.resultType|raw$, err error) {
+// $.verb$ takes name of the _$.type|private$, and returns the corresponding $.resultType|raw$ object, and an error if there is any.
+func (c *$.type|privatePlural$) $.verb$(ctx $.context|raw$, _$.type|private$Name string, options $.GetOptions|raw$) (result *$.resultType|raw$, err error) {
 	result = &$.resultType|raw${}
 	err = c.GetClient().Get().
 		$if .prefersProtobuf$UseProtobufAsDefault().$end$
 		$if .namespaced$Namespace(c.GetNamespace()).$end$
 		Resource("$.type|resource$").
-		Name($.type|private$Name).
+		Name(_$.type|private$Name).
 		SubResource("$.subresourcePath$").
 		VersionedParams(&options, $.schemeParameterCodec|raw$).
 		Do(ctx).
@@ -697,7 +697,7 @@ func (c *$.type|privatePlural$) $.verb$(ctx $.context|raw$, $.type|private$Name 
 `
 
 var deleteTemplate = `
-// $.verb$ takes name of the $.type|private$ and deletes it. Returns an error if one occurs.
+// $.verb$ takes name of the _$.type|private$ and deletes it. Returns an error if one occurs.
 func (c *$.type|privatePlural$) $.verb$(ctx $.context|raw$, name string, opts $.DeleteOptions|raw$) error {
 	return c.GetClient().Delete().
 		$if .prefersProtobuf$UseProtobufAsDefault().$end$
@@ -711,17 +711,17 @@ func (c *$.type|privatePlural$) $.verb$(ctx $.context|raw$, name string, opts $.
 `
 
 var createSubresourceTemplate = `
-// $.verb$ takes the representation of a $.inputType|private$ and creates it.  Returns the server's representation of the $.resultType|private$, and an error, if there is any.
-func (c *$.type|privatePlural$) $.verb$(ctx $.context|raw$, $.type|private$Name string, $.inputType|private$ *$.inputType|raw$, opts $.CreateOptions|raw$) (result *$.resultType|raw$, err error) {
+// $.verb$ takes the representation of a _$.inputType|private$ and creates it.  Returns the server's representation of the $.resultType|private$, and an error, if there is any.
+func (c *$.type|privatePlural$) $.verb$(ctx $.context|raw$, _$.type|private$Name string, _$.inputType|private$ *$.inputType|raw$, opts $.CreateOptions|raw$) (result *$.resultType|raw$, err error) {
 	result = &$.resultType|raw${}
 	err = c.GetClient().Post().
 		$if .prefersProtobuf$UseProtobufAsDefault().$end$
 		$if .namespaced$Namespace(c.GetNamespace()).$end$
 		Resource("$.type|resource$").
-		Name($.type|private$Name).
+		Name(_$.type|private$Name).
 		SubResource("$.subresourcePath$").
 		VersionedParams(&opts, $.schemeParameterCodec|raw$).
-		Body($.inputType|private$).
+		Body(_$.inputType|private$).
 		Do(ctx).
 		Into(result)
 	return
@@ -729,15 +729,15 @@ func (c *$.type|privatePlural$) $.verb$(ctx $.context|raw$, $.type|private$Name 
 `
 
 var createTemplate = `
-// $.verb$ takes the representation of a $.inputType|private$ and creates it.  Returns the server's representation of the $.resultType|private$, and an error, if there is any.
-func (c *$.type|privatePlural$) $.verb$(ctx $.context|raw$, $.inputType|private$ *$.inputType|raw$, opts $.CreateOptions|raw$) (result *$.resultType|raw$, err error) {
+// $.verb$ takes the representation of a _$.inputType|private$ and creates it.  Returns the server's representation of the $.resultType|private$, and an error, if there is any.
+func (c *$.type|privatePlural$) $.verb$(ctx $.context|raw$, _$.inputType|private$ *$.inputType|raw$, opts $.CreateOptions|raw$) (result *$.resultType|raw$, err error) {
 	result = &$.resultType|raw${}
 	err = c.GetClient().Post().
 		$if .prefersProtobuf$UseProtobufAsDefault().$end$
 		$if .namespaced$Namespace(c.GetNamespace()).$end$
 		Resource("$.type|resource$").
 		VersionedParams(&opts, $.schemeParameterCodec|raw$).
-		Body($.inputType|private$).
+		Body(_$.inputType|private$).
 		Do(ctx).
 		Into(result)
 	return
@@ -745,17 +745,17 @@ func (c *$.type|privatePlural$) $.verb$(ctx $.context|raw$, $.inputType|private$
 `
 
 var updateSubresourceTemplate = `
-// $.verb$ takes the top resource name and the representation of a $.inputType|private$ and updates it. Returns the server's representation of the $.resultType|private$, and an error, if there is any.
-func (c *$.type|privatePlural$) $.verb$(ctx $.context|raw$, $.type|private$Name string, $.inputType|private$ *$.inputType|raw$, opts $.UpdateOptions|raw$) (result *$.resultType|raw$, err error) {
+// $.verb$ takes the top resource name and the representation of a _$.inputType|private$ and updates it. Returns the server's representation of the $.resultType|private$, and an error, if there is any.
+func (c *$.type|privatePlural$) $.verb$(ctx $.context|raw$, _$.type|private$Name string, _$.inputType|private$ *$.inputType|raw$, opts $.UpdateOptions|raw$) (result *$.resultType|raw$, err error) {
 	result = &$.resultType|raw${}
 	err = c.GetClient().Put().
 		$if .prefersProtobuf$UseProtobufAsDefault().$end$
 		$if .namespaced$Namespace(c.GetNamespace()).$end$
 		Resource("$.type|resource$").
-		Name($.type|private$Name).
+		Name(_$.type|private$Name).
 		SubResource("$.subresourcePath$").
 		VersionedParams(&opts, $.schemeParameterCodec|raw$).
-		Body($.inputType|private$).
+		Body(_$.inputType|private$).
 		Do(ctx).
 		Into(result)
 	return
@@ -763,16 +763,16 @@ func (c *$.type|privatePlural$) $.verb$(ctx $.context|raw$, $.type|private$Name 
 `
 
 var updateTemplate = `
-// $.verb$ takes the representation of a $.inputType|private$ and updates it. Returns the server's representation of the $.resultType|private$, and an error, if there is any.
-func (c *$.type|privatePlural$) $.verb$(ctx $.context|raw$, $.inputType|private$ *$.inputType|raw$, opts $.UpdateOptions|raw$) (result *$.resultType|raw$, err error) {
+// $.verb$ takes the representation of a _$.inputType|private$ and updates it. Returns the server's representation of the $.resultType|private$, and an error, if there is any.
+func (c *$.type|privatePlural$) $.verb$(ctx $.context|raw$, _$.inputType|private$ *$.inputType|raw$, opts $.UpdateOptions|raw$) (result *$.resultType|raw$, err error) {
 	result = &$.resultType|raw${}
 	err = c.GetClient().Put().
 		$if .prefersProtobuf$UseProtobufAsDefault().$end$
 		$if .namespaced$Namespace(c.GetNamespace()).$end$
 		Resource("$.type|resource$").
-		Name($.inputType|private$.Name).
+		Name(_$.inputType|private$.Name).
 		VersionedParams(&opts, $.schemeParameterCodec|raw$).
-		Body($.inputType|private$).
+		Body(_$.inputType|private$).
 		Do(ctx).
 		Into(result)
 	return
@@ -836,16 +836,16 @@ func (c *$.type|privatePlural$) $.verb$(ctx $.context|raw$, name string, pt $.Pa
 
 var applyTemplate = `
 // $.verb$ takes the given apply declarative configuration, applies it and returns the applied $.resultType|private$.
-func (c *$.type|privatePlural$) $.verb$(ctx $.context|raw$, $.inputType|private$ *$.inputApplyConfig|raw$, opts $.ApplyOptions|raw$) (result *$.resultType|raw$, err error) {
-	if $.inputType|private$ == nil {
-		return nil, $.fmtErrorf|raw$("$.inputType|private$ provided to $.verb$ must not be nil")
+func (c *$.type|privatePlural$) $.verb$(ctx $.context|raw$, _$.inputType|private$ *$.inputApplyConfig|raw$, opts $.ApplyOptions|raw$) (result *$.resultType|raw$, err error) {
+	if _$.inputType|private$ == nil {
+		return nil, $.fmtErrorf|raw$("_$.inputType|private$ provided to $.verb$ must not be nil")
 	}
 	patchOpts := opts.ToPatchOptions()
-	name := $.inputType|private$.Name
+	name := _$.inputType|private$.Name
 	if name == nil {
-		return nil, $.fmtErrorf|raw$("$.inputType|private$.Name must be provided to $.verb$")
+		return nil, $.fmtErrorf|raw$("_$.inputType|private$.Name must be provided to $.verb$")
 	}
-	request, err := $.applyNewRequest|raw$(c.GetClient(), $.inputType|private$)
+	request, err := $.applyNewRequest|raw$(c.GetClient(), _$.inputType|private$)
 	if err != nil {
 		return nil, err
 	}
@@ -865,12 +865,12 @@ func (c *$.type|privatePlural$) $.verb$(ctx $.context|raw$, $.inputType|private$
 var applySubresourceTemplate = `
 // $.verb$ takes top resource name and the apply declarative configuration for $.subresourcePath$,
 // applies it and returns the applied $.resultType|private$, and an error, if there is any.
-func (c *$.type|privatePlural$) $.verb$(ctx $.context|raw$, $.type|private$Name string, $.inputType|private$ *$.inputApplyConfig|raw$, opts $.ApplyOptions|raw$) (result *$.resultType|raw$, err error) {
-	if $.inputType|private$ == nil {
-		return nil, $.fmtErrorf|raw$("$.inputType|private$ provided to $.verb$ must not be nil")
+func (c *$.type|privatePlural$) $.verb$(ctx $.context|raw$, _$.type|private$Name string, _$.inputType|private$ *$.inputApplyConfig|raw$, opts $.ApplyOptions|raw$) (result *$.resultType|raw$, err error) {
+	if _$.inputType|private$ == nil {
+		return nil, $.fmtErrorf|raw$("_$.inputType|private$ provided to $.verb$ must not be nil")
 	}
 	patchOpts := opts.ToPatchOptions()
-	request, err := $.applyNewRequest|raw$(c.GetClient(), $.inputType|private$)
+	request, err := $.applyNewRequest|raw$(c.GetClient(), _$.inputType|private$)
 	if err != nil {
 		return nil, err
 	}
@@ -880,7 +880,7 @@ func (c *$.type|privatePlural$) $.verb$(ctx $.context|raw$, $.type|private$Name 
 		$if .prefersProtobuf$UseProtobufAsDefault().$end$
 		$if .namespaced$Namespace(c.GetNamespace()).$end$
 		Resource("$.type|resource$").
-		Name($.type|private$Name).
+		Name(_$.type|private$Name).
 		SubResource("$.subresourcePath$").
 		VersionedParams(&patchOpts, $.schemeParameterCodec|raw$).
 		Do(ctx).
